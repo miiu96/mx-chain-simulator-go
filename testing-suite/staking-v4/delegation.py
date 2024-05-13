@@ -195,3 +195,29 @@ def stake_nodes(owner: Wallet, delegation_sc_address: str, validatorKeys: list[V
     # send tx
     tx_hash = proxy_default.send_transaction(tx)
     return tx_hash
+
+def delegate(sender: Wallet, delegation_sc_address: str, amount: int):
+
+    # compute tx
+    tx = Transaction(sender=sender.get_address().to_bech32(),
+                     receiver=delegation_sc_address,
+                     nonce=sender.get_account().nonce,
+                     gas_price=1000000000,
+                     gas_limit=12000000,
+                     chain_id=chain_id,
+                     value=amount)
+
+    tx.data = f"delegate".encode()
+
+    tx_comp = TransactionComputer()
+    result_bytes = tx_comp.compute_bytes_for_signing(tx)
+
+    signature = sender.get_signer().sign(result_bytes)
+    tx.signature = signature
+
+    # send tx
+    tx_hash = proxy_default.send_transaction(tx)
+
+    return tx_hash
+
+

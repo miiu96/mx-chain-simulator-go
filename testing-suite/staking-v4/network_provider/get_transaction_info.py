@@ -24,3 +24,19 @@ def check_if_error_is_present_in_tx(error, tx_hash) -> bool:
     response.raise_for_status()
 
     return error_bytes.decode() in response.text or error in response.text
+
+def get_gasUsed_from_tx(tx_hash):
+    response = requests.get(f"{DEFAULT_PROXY}/transaction/{tx_hash}/?withResults=true")
+    parsed = response.json()
+    general_data = parsed.get("data")
+    transaction = general_data.get("transaction")
+    gasUsed = transaction.get("fee")
+
+    return gasUsed
+
+def get_data_from_tx_hash(tx_hash):
+    response = requests.get(f"{DEFAULT_PROXY}/transaction/{tx_hash}/?withResults=true")
+    parsed = response.json()
+
+    return parsed
+

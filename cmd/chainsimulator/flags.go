@@ -127,6 +127,10 @@ var (
 		Name:  "skip-configs-download",
 		Usage: "The flag is used to specify whether to skip downloading configs",
 	}
+	fetchConfigsAndClose = cli.BoolFlag{
+		Name:  "fetch-configs-and-close",
+		Usage: "The flag is used to specify whether to fetch configs",
+	}
 )
 
 func applyFlags(ctx *cli.Context, cfg *config.Config) {

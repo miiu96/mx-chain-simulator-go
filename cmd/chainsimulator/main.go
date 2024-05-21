@@ -81,6 +81,7 @@ func main() {
 		autoGenerateBlocks,
 		blockTimeInMs,
 		skipConfigsDownload,
+		fetchConfigsAndClose,
 	}
 
 	app.Authors = []cli.Author{
@@ -126,6 +127,11 @@ func startChainSimulator(ctx *cli.Context) error {
 	err = fetchConfigs(skipDownload, cfg, nodeConfigs, proxyConfigs)
 	if err != nil {
 		return fmt.Errorf("%w while fetching configs", err)
+	}
+
+	fetchConfigsAndCloseBool := ctx.GlobalBool(fetchConfigsAndClose.Name)
+	if fetchConfigsAndCloseBool {
+		return nil
 	}
 
 	bypassTxsSignature := ctx.GlobalBool(bypassTransactionsSignature.Name)
